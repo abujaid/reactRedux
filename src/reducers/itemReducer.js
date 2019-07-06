@@ -2,7 +2,8 @@ import * as actionTypes from '../constants/items';
 
 const intialState = {
     items: [],
-    loading: false
+    loading: false,
+    token: localStorage.getItem('token'),
 }
 export const itemReducer = (state = intialState, action) =>
 {

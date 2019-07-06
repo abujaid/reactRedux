@@ -26,7 +26,20 @@ class LoginModal extends Component
             modal: !prevState.modal
         }));
     }
-
+    handleChange = (e) =>
+    {
+        this.setState({ [e.target.name]: e.target.value })
+    }
+    handleSubmit = (e) =>
+    {
+        e.preventDefault();
+        const { email, password } = this.state;
+        const user = {
+            email,
+            password
+        }
+        this.props.login(user)
+    }
     render ()
     {
         console.log(this.props)
@@ -35,33 +48,36 @@ class LoginModal extends Component
                 <NavLink href="#" onClick={this.toggle}>{this.props.buttonLabel}</NavLink>
                 <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
                     <ModalHeader toggle={this.toggle}>Sign In</ModalHeader>
-                    <ModalBody>
-                        <FormGroup>
-                            <Label>Email</Label>
-                            <Input type="text" name="email" />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label>Password</Label>
-                            <Input type="password" name="password" />
-                        </FormGroup>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="success" onClick={this.toggle}>Sign In</Button>{' '}
-                        <Button color="danger" onClick={this.toggle}>Cancel</Button>
-                    </ModalFooter>
+                    <Form onSubmit={this.handleSubmit}>
+                        <ModalBody>
+                            <FormGroup>
+                                <Label>Email</Label>
+                                <Input type="text" name="email"
+                                    value={this.state.email}
+                                    onChange={this.handleChange}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label>Password</Label>
+                                <Input type="password" name="password"
+                                    value={this.state.password}
+                                    onChange={this.handleChange}
+                                />
+                            </FormGroup>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="success">Sign In</Button>{' '}
+                            <Button color="danger" onClick={this.toggle}>Cancel</Button>
+                        </ModalFooter>
+                    </Form>
                 </Modal>
             </div>
         )
     }
 }
-const mapStateToProps = (state) =>
-{
-    return {
-        auth: state.itme
-    }
-}
-// const mapStateToProps = state => ({
-//     isAuthenticated: state.auth,
-//     // error: state.error
-// });
+
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth
+    // error: state.error
+});
 export default connect(mapStateToProps, { login })(LoginModal)

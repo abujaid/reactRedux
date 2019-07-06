@@ -13,8 +13,9 @@ export const getItems = () =>
         })
     }
 }
-export const delteItem = (id) =>
+export const delteItem = (id, token) =>
 {
+    axios.defaults.headers.common['x-auth-token'] = token;
     return async dispatch =>
     {
         await axios.delete(`/api/items/${id}`).then(response =>

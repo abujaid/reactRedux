@@ -44,7 +44,7 @@ class RegisterModal extends Component
     }
     render ()
     {
-        console.log(this.props)
+        // console.log(this.props)
         return (
             <div>
                 <NavLink href="#" onClick={this.toggle}>Register</NavLink>

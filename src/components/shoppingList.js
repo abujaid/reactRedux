@@ -14,11 +14,13 @@ class shoppingList extends Component
     }
     onDeleteClick = (id) =>
     {
-        this.props.delteItem(id)
+        let token = localStorage.getItem('token')
+        this.props.delteItem(id, token)
     }
     render ()
     {
         const { items } = this.props.item
+        console.log(this.props)
         return (
             <Container>
                 <ItemModel />
