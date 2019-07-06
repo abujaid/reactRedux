@@ -13,7 +13,7 @@ export function register (formData = {})
             })
             .catch(err =>
             {
-                console.log(err)
+                dispatch({ type: actionTypes.REGISTER_ERROR, payload: err.response.status })
             })
     }
 }

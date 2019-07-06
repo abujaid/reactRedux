@@ -18,6 +18,7 @@ export const authReducer = (state = initialState, action) =>
                 usser: action.payload
             }
         case actionTypes.LOGOUT:
+        case actionTypes.REGISTER_ERROR:
             localStorage.removeItem('token');
             return {
                 ...state,
