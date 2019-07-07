@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form } from 'reactstrap';
+import { connect } from 'react-redux';
+import { addItem } from '../actions/itemActions';
 
-export default class ItemModel extends Component
+class ItemModel extends Component
 {
     constructor (props)
     {
@@ -24,15 +26,20 @@ export default class ItemModel extends Component
     handelSubmit = (e) =>
     {
         e.preventDefault()
+        const item = {
+            name: this.state.name
+        }
+        this.props.addItem(item)
     }
     render ()
     {
+        console.log(this.props)
         return (
             <div>
                 <Button color="dark" onClick={this.toggle}>Add Item</Button>
                 <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
                     <ModalHeader toggle={this.toggle}>Add Item</ModalHeader>
-                    <Form>
+                    <Form onSubmit={this.handelSubmit}>
                         <ModalBody>
                             <Input type="text"
                                 placeholder="Item name"
@@ -42,7 +49,7 @@ export default class ItemModel extends Component
                             />
                         </ModalBody>
                         <ModalFooter>
-                            <Button color="primary" size="sm" onClick={this.toggle}>Add item</Button>{' '}
+                            <Button color="primary" size="sm">Add item</Button>{' '}
                             <Button color="secondary" size="sm" onClick={this.toggle}>Close</Button>
                         </ModalFooter>
                     </Form>
@@ -51,3 +58,10 @@ export default class ItemModel extends Component
         )
     }
 }
+const mapStateToProps = (state) =>
+{
+    return {
+        item: state.item
+    }
+}
+export default connect(mapStateToProps, { addItem })(ItemModel)

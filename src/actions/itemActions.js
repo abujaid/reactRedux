@@ -1,30 +1,53 @@
-import axios from 'axios'
-import * as actionTypes from '../constants/items'
-export const getItems = () =>
-{
-    return async dispatch =>
-    {
-        await axios.get('/api/items').then(response =>
-        {
-            dispatch({ type: actionTypes.GET_ITEMS, payload: response.data })
-        }).catch(err =>
-        {
-            dispatch({ type: actionTypes.GET_ERROR, payload: err.response.data })
-        })
-    }
-}
-export const delteItem = (id, token) =>
-{
-    axios.defaults.headers.common['x-auth-token'] = token;
-    return async dispatch =>
-    {
-        await axios.delete(`/api/items/${id}`).then(response =>
-        {
-            console.log(response)
-            dispatch({ type: actionTypes.REMOVE_ITEM, payload: id })
-        }).catch(err =>
-        {
-            console.log(err)
-        })
-    }
-}
+import axios from 'axios';
+import { GET_ITEMS, ADD_ITEM, DELETE_ITEM, ITEMS_LOADING } from './types';
+import { tokenConfig } from './authActions';
+import { returnErrors } from './errorActions';
+
+export const getItems = () => dispatch => {
+  dispatch(setItemsLoading());
+  axios
+    .get('/api/items')
+    .then(res =>
+      dispatch({
+        type: GET_ITEMS,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
+export const addItem = item => (dispatch, getState) => {
+  axios
+    .post('/api/items', item, tokenConfig(getState))
+    .then(res =>
+      dispatch({
+        type: ADD_ITEM,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
+export const deleteItem = id => (dispatch, getState) => {
+  axios
+    .delete(`/api/items/${id}`, tokenConfig(getState))
+    .then(res =>
+      dispatch({
+        type: DELETE_ITEM,
+        payload: id
+      })
+    )
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
+export const setItemsLoading = () => {
+  return {
+    type: ITEMS_LOADING
+  };
+};
